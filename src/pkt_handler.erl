@@ -59,6 +59,7 @@ create_url(Req, State) ->
     io:format("~nID is ~p for URL ~p with the hash of ~p", [IdB64, Url, Hash]),
     case cowboy_req:method(Req2) of
         <<"POST">> ->
+            ok = pkt_storage_server:put(uri, Id, {Hash, Url}),
             {{true, <<$/, IdB64/binary>>}, Req2, State};
         _ ->
             {true, Req2, State}
