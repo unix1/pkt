@@ -13,7 +13,7 @@
 -export([allowed_methods/2]).
 -export([content_types_accepted/2]).
 -export([content_types_provided/2]).
--export([create_url/2]).
+-export([create_uri/2]).
 -export([to_html/2]).
 
 %%====================================================================
@@ -28,7 +28,7 @@ allowed_methods(Req, State) ->
 
 content_types_accepted(Req, State) ->
     {[
-        {{<<"application">>, <<"x-www-form-urlencoded">>, []}, create_url}
+        {{<<"application">>, <<"x-www-form-urlencoded">>, []}, create_uri}
     ], Req, State}.
 
 content_types_provided(Req, State) ->
@@ -49,17 +49,17 @@ to_html(Req, State) ->
 </html>">>],
     {Body, Req, State}.
 
-create_url(Req, State) ->
-    {ok, [{<<"url">>, Url}], Req2} = cowboy_req:read_urlencoded_body(Req),
+create_uri(Req, State) ->
+    {ok, [{<<"uri">>, Uri}], Req2} = cowboy_req:read_urlencoded_body(Req),
     MaxSize = 7,
     AlphabetSize = 64,
-    Hash = crypto:hash(sha256, Url),
+    Hash = crypto:hash(sha256, Uri),
     Id = rand:uniform(trunc(math:pow(AlphabetSize, MaxSize))),
     IdB64 = list_to_binary(pkt_b64:encode(Id)),
-    io:format("~nID is ~p for URL ~p with the hash of ~p", [IdB64, Url, Hash]),
+    io:format("~nID is ~p for URL ~p with the hash of ~p", [IdB64, Uri, Hash]),
     case cowboy_req:method(Req2) of
         <<"POST">> ->
-            ok = pkt_storage_server:put(uri, Id, {Hash, Url}),
+            ok = pkt_storage_server:put(uri, Id, {Hash, Uri}),
             {{true, <<$/, IdB64/binary>>}, Req2, State};
         _ ->
             {true, Req2, State}

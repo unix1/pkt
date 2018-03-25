@@ -31,7 +31,7 @@ content_types_provided(Req, State) ->
     ], Req, State}.
 
 resource_exists(Req, _State) ->
-    case cowboy_req:binding(url_id, Req) of
+    case cowboy_req:binding(uri_id, Req) of
         undefined ->
             {false, Req, index};
         Id ->

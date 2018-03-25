@@ -73,15 +73,15 @@ create(_) ->
     ContentType = get_content_type(),
     HttpOpts = get_http_options(),
     Opts = get_options(),
-    Url = "http://foo/bar",
+    Uri = "http://foo/bar",
     {ok, {{_, 303, _}, ResponseHeaders, Body}} = httpc:request(
         post,
-        {Host, Headers, ContentType, "url=" ++ Url},
+        {Host, Headers, ContentType, "uri=" ++ Uri},
         HttpOpts,
         Opts),
     {value, {"location", Location}} = lists:keysearch("location", 1, ResponseHeaders),
     "/" ++ IdStr = Location,
     Id = pkt_b64:decode(IdStr),
-    Hash = crypto:hash(sha256, Url),
-    UrlBin = list_to_binary(Url),
-    [{Id, {Hash, UrlBin}}] = pkt_storage_server:get(uri, Id).
+    Hash = crypto:hash(sha256, Uri),
+    UriBin = list_to_binary(Uri),
+    [{Id, {Hash, UriBin}}] = pkt_storage_server:get(uri, Id).
