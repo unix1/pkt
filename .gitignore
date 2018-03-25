@@ -6,8 +6,7 @@
 *.plt
 _rel
 deps
-ebin/*.beam
-ebin/test
+ebin
 erl_crash.dump
 logs
 test/*.beam
