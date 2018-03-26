@@ -39,7 +39,7 @@ To run the application in shell, type
 
     make run
 
-The server is now active at https://localhost:8080.
+The server is now active at http://localhost:8080.
 
 #### REST API
 

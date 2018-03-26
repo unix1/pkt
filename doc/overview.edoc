@@ -1,0 +1,28 @@
+** this is the overview.doc file for the application 'pkt' **
+
+@author Unix One
+@version 0.1
+@title Welcome to the `pkt' application!
+@doc `pkt' is a pocket URL shortener
+
+== Prerequisites ==
+
+git, GNU make, erlang (tested on 20)
+
+== Usage ==
+
+Run application
+
+`make run'
+
+Web server should be listening on port 8080, e.g. http://localhost:8080
+
+=== Other Usage ===
+
+Run tests
+
+`make tests'
+
+Create docs
+
+`make docs'
