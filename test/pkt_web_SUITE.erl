@@ -74,7 +74,7 @@ create(_) ->
     HttpOpts = get_http_options(),
     Opts = get_options(),
     Uri = "http://foo/bar",
-    {ok, {{_, 303, _}, ResponseHeaders, Body}} = httpc:request(
+    {ok, {{_, 303, _}, ResponseHeaders, _Body}} = httpc:request(
         post,
         {Host, Headers, ContentType, "uri=" ++ Uri},
         HttpOpts,

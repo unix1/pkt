@@ -13,7 +13,8 @@
 -export([
     b64_encode/1,
     b64_decode/1,
-    list_pos/1
+    list_pos/1,
+    html_encode/1
 ]).
 
 %%====================================================================
@@ -24,7 +25,8 @@ all() ->
     [
         b64_encode,
         b64_decode,
-        list_pos
+        list_pos,
+        html_encode
     ].
 
 init_per_suite(Config) ->
@@ -69,3 +71,9 @@ list_pos(_) ->
     1 = pkt_util:list_pos(5, [5, 4, 3, 2, 1], 1),
     4 = pkt_util:list_pos(5, [1, 2, 3, 4, 5, 6, 7], 0),
     5 = pkt_util:list_pos(5, [1, 2, 3, 4, 5, 6, 7], 1).
+
+html_encode(_) ->
+    <<"foo &gt; bar if bar &lt; foo">> = pkt_util:html_encode(<<"foo > bar if bar < foo">>),
+    <<"foo &amp; bar walk into a &quot;bar&quot;">> = pkt_util:html_encode(<<"foo & bar walk into a \"bar\"">>),
+    "foo &gt; bar if bar &lt; foo" = pkt_util:html_encode("foo > bar if bar < foo"),
+    "foo &amp; bar walk into a &quot;bar&quot;" = pkt_util:html_encode("foo & bar walk into a \"bar\"").
