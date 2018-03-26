@@ -60,7 +60,6 @@ create_uri(Req, State) ->
     Hash = crypto:hash(sha256, Uri),
     Id = rand:uniform(trunc(math:pow(AlphabetSize, MaxSize))),
     IdB64 = list_to_binary(pkt_b64:encode(Id)),
-    io:format("~nID is ~p for URL ~p with the hash of ~p", [IdB64, Uri, Hash]),
     case cowboy_req:method(Req2) of
         <<"POST">> ->
             ok = try_create(Id, Hash, Uri, 1),

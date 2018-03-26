@@ -49,7 +49,6 @@ resource_exists(Req, _State) ->
 
 to_html(Req, State) ->
     #{r := R} = cowboy_req:match_qs([{r, [], <<"1">>}], Req),
-    io:format("~nr is: ~p", [R]),
     Id = cowboy_req:binding(uri_id, Req),
     #{hash := _Hash, uri := Uri} = get_resource(Id),
     UriEncoded = pkt_util:html_encode(Uri),
