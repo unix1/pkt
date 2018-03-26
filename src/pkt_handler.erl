@@ -43,8 +43,12 @@ to_html(Req, State) ->
     <title>URL shortener</title>
 </head>
 <body>
-    <h2>Hello User</h2>
+    <h2><a href=\"/\">Pocket URL Shortener</a></h2>
     <p>Shorten all kinds of URLs here.</p>
+    <form action=\"/\" method=\"post\">
+        <p>Ugly URL: <input type=\"url\" required=\"required\" name=\"uri\" /></p>
+        <p><input type=\"submit\" value=\"Shorten My Ugly URL\" /></p>
+    </form>
 </body>
 </html>">>],
     {Body, Req, State}.
@@ -59,8 +63,9 @@ create_uri(Req, State) ->
     io:format("~nID is ~p for URL ~p with the hash of ~p", [IdB64, Uri, Hash]),
     case cowboy_req:method(Req2) of
         <<"POST">> ->
-            ok = pkt_storage_server:put(uri, Id, {Hash, Uri}),
-            {{true, <<$/, IdB64/binary>>}, Req2, State};
+            ok = try_create(Id, Hash, Uri, 1),
+            FlagNoRedirect = <<"?r=0">>,
+            {{true, <<$/, IdB64/binary, FlagNoRedirect/binary>>}, Req2, State};
         _ ->
             {true, Req2, State}
     end.
@@ -68,3 +73,15 @@ create_uri(Req, State) ->
 %%====================================================================
 %% Internal functions
 %%====================================================================
+
+try_create(_, _, _, 3) ->
+    % Fail after 3 attempts of not finding an available ID
+    fail;
+try_create(Id, Hash, Uri, Attempt)
+    when is_integer(Attempt), Attempt < 3, Attempt > 0 ->
+    case pkt_storage_server:get(uri, Id) of
+        [] ->
+            ok = pkt_storage_server:put(uri, Id, {Hash, Uri});
+        _ ->
+            try_create(Id, Hash, Uri, Attempt + 1)
+    end.

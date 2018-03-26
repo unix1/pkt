@@ -80,7 +80,8 @@ create(_) ->
         HttpOpts,
         Opts),
     {value, {"location", Location}} = lists:keysearch("location", 1, ResponseHeaders),
-    "/" ++ IdStr = Location,
+    % Location = /abcdefg?r=0
+    IdStr = string:slice(Location, 1, 7),
     Id = pkt_b64:decode(IdStr),
     Hash = crypto:hash(sha256, Uri),
     UriBin = list_to_binary(Uri),

@@ -67,7 +67,7 @@ to_html(Req, State) ->
     <title>URL shortener</title>
 </head>
 <body>
-    <h2>Hello User</h2>
+    <h2><a href=\"/\">Pocket URL Shortener</a></h2>
     <p>Short URL: <a href=\"">>, UriShortEncoded, <<"\">">>, UriShortEncoded, <<"</a></p>
     <p>Destination URL: <a href=\"">>, UriEncoded, <<"\">">>, UriEncoded, <<"</a></p>
 </body>
